@@ -1,22 +1,69 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-let drawing = false;
+const clearBtn = document.getElementById("clear");
 
-canvas.addEventListener("mousedown", () => drawing = true);
-canvas.addEventListener("mouseup", () => drawing = false);
-canvas.addEventListener("mouseout", () => drawing = false);
-canvas.addEventListener("mousemove", dibujar);
-function dibujar(event) {
-  if (!drawing) return;
-  const rect = canvas.getBoundingClientRect();
-  ctx.lineWidth = 2;
-  ctx.lineCap = "round";
-  ctx.strokeStyle = "#000";
-  ctx.lineTo(event.clientX - rect.left, event.clientY - rect.top);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(event.clientX - rect.left, event.clientY - rect.top);
+// Ajustar tamaño dinámico
+function resizeCanvas() {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = 150; // puedes modificar este valor
 }
+resizeCanvas(); // ejecutar al cargar
+window.addEventListener("resize", resizeCanvas); // adaptar en cambios de tamaño
+
+let isDrawing = false;
+
+function getPos(e) {
+  const rect = canvas.getBoundingClientRect();
+  if (e.touches && e.touches.length > 0) {
+    return {
+      x: e.touches[0].clientX - rect.left,
+      y: e.touches[0].clientY - rect.top
+    };
+  } else {
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+  }
+}
+
+function startDraw(e) {
+  e.preventDefault();
+  isDrawing = true;
+  const pos = getPos(e);
+  ctx.beginPath();
+  ctx.moveTo(pos.x, pos.y);
+}
+
+function draw(e) {
+  if (!isDrawing) return;
+  e.preventDefault();
+  const pos = getPos(e);
+  ctx.lineTo(pos.x, pos.y);
+  ctx.stroke();
+}
+
+function stopDraw(e) {
+  if (!isDrawing) return;
+  e.preventDefault();
+  isDrawing = false;
+}
+
+// Eventos para mouse
+canvas.addEventListener("mousedown", startDraw);
+canvas.addEventListener("mousemove", draw);
+canvas.addEventListener("mouseup", stopDraw);
+canvas.addEventListener("mouseleave", stopDraw);
+
+// Eventos para touch
+canvas.addEventListener("touchstart", startDraw);
+canvas.addEventListener("touchmove", draw);
+canvas.addEventListener("touchend", stopDraw);
+
+// Borrar firma
+clearBtn.addEventListener("click", () => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+});
 
 document.getElementById("clear").addEventListener("click", () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
