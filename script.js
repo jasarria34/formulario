@@ -89,7 +89,7 @@ document.getElementById("flightForm").addEventListener("submit", async function 
 
   try {
     const response = await fetch("https://script.google.com/macros/s/AKfycbyYLxtH_qH4rxtrlT3KOlhP5EnsUBULdWQBc_bHxvlnzhVyO65tb7a2qeovFVatjZl0/exec", {
-      method: "POST",
+      method: "POST",  
       mode: "no-cors",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(datos)
