@@ -88,7 +88,7 @@ document.getElementById("flightForm").addEventListener("submit", async function 
   };
 
   try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycby_F_ydM2pSQk8KYUTYM9vfUYqvrENRv4_ax35SuVj2J7LZ-TYKIA2ucTo7lxP46u5C/exec", {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbwsGEI3fQpmT0-kL1LLdJWcBv5DC2pkE2ef6CSpdusO0lBJj0S-vptZMgvMZhaYuT6G/exec", {
       method: "POST",
       mode: "no-cors",
       headers: { "Content-Type": "application/json" },
