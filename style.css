@@ -37,8 +37,11 @@ form input, form textarea {
   margin-top: 0.3rem;
 }
 canvas {
+  width: 100%;
+  max-width: 400px;
+  height: 150px;
   border: 1px solid #ccc;
-  background: #f9f9f9;
+  touch-action: none; /* Evita que se desplace la página al firmar con el dedo */
 }
 button {
   padding: 0.5rem 1rem;
