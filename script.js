@@ -94,4 +94,3 @@ document.getElementById("flightForm").addEventListener("submit", async function 
     document.getElementById("estado").textContent = "Error al guardar: " + error.message;
   }
 });
-
