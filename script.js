@@ -1,15 +1,13 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const clearBtn = document.getElementById("clear");
-const preview = document.getElementById("firmaPreview");
 
-// Ajustar tamaño dinámico
 function resizeCanvas() {
   canvas.width = canvas.offsetWidth;
-  canvas.height = 150; // puedes modificar este valor
+  canvas.height = 150;
 }
-resizeCanvas(); // ejecutar al cargar
-window.addEventListener("resize", resizeCanvas); // adaptar en cambios de tamaño
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
 
 let isDrawing = false;
 
@@ -50,56 +48,50 @@ function stopDraw(e) {
   isDrawing = false;
 }
 
-// Eventos para mouse
 canvas.addEventListener("mousedown", startDraw);
 canvas.addEventListener("mousemove", draw);
 canvas.addEventListener("mouseup", stopDraw);
 canvas.addEventListener("mouseleave", stopDraw);
-
-// Eventos para touch
 canvas.addEventListener("touchstart", startDraw);
 canvas.addEventListener("touchmove", draw);
 canvas.addEventListener("touchend", stopDraw);
 
-// Borrar firma
 clearBtn.addEventListener("click", () => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-});
-
-document.getElementById("clear").addEventListener("click", () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.beginPath();
 });
 
 document.getElementById("flightForm").addEventListener("submit", async function (e) {
   e.preventDefault();
-  const formData = new FormData(this);
-  const firma = canvas.toDataURL();
+
+  const form = e.target;
+  const firma = canvas.toDataURL("image/png"); // Base64 de la firma
 
   const data = {
-      fecha: form.fecha.value,
-      hora1: form.hora1.value,
-      hora2: form.hora2.value,
-      piloto: form.piloto.value,
-      modelo: form.modelo.value,
-      origen: form.origen.value,
-      destino: form.destino.value,
-      duracion: form.duracion.value,
-      maniobras: form.maniobras.value,
-      firma: document.getElementById("firmaImagen").toDataURL("image/png") // firma en base64
-    };
+    fecha: form.fecha.value,
+    hora1: form.hora1.value,
+    hora2: form.hora2.value,
+    piloto: form.piloto.value,
+    modelo: form.modelo.value,
+    origen: form.origen.value,
+    destino: form.destino.value,
+    duracion: form.duracion.value,
+    maniobras: form.maniobras.value,
+    firma: firma
+  };
 
   try {
     const response = await fetch("https://script.google.com/macros/s/AKfycbyKDvfPSA1OXGPW_hYWW1O42GQ2IIP6GGEyz1bDFhr4zDHB9LQuS4MHu1TsMJGu2wet/exec", {
-      method: "POST",  
-      mode: "no-cors",
+      method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(datos)
+      body: JSON.stringify(data)
     });
+
     document.getElementById("estado").textContent = "Vuelo guardado correctamente.";
     this.reset();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   } catch (error) {
-    document.getElementById("estado").textContent = "Error al guardar: " + error;
+    document.getElementById("estado").textContent = "Error al guardar: " + error.message;
   }
 });
+
