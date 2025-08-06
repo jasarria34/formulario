@@ -76,16 +76,18 @@ document.getElementById("flightForm").addEventListener("submit", async function 
   const formData = new FormData(this);
   const firma = canvas.toDataURL();
 
-  const datos = {
-    fecha: formData.get("fecha"),
-    piloto: formData.get("piloto"),
-    aeronave: formData.get("aeronave"),
-    origen: formData.get("origen"),
-    destino: formData.get("destino"),
-    duracion: formData.get("duracion"),
-    observaciones: formData.get("observaciones"),
-    firma: firma
-  };
+  const data = {
+      fecha: form.fecha.value,
+      hora1: form.hora1.value,
+      hora2: form.hora2.value,
+      piloto: form.piloto.value,
+      modelo: form.modelo.value,
+      origen: form.origen.value,
+      destino: form.destino.value,
+      duracion: form.duracion.value,
+      maniobras: form.maniobras.value,
+      firma: document.getElementById("firmaImagen").toDataURL("image/png") // firma en base64
+    };
 
   try {
     const response = await fetch("https://script.google.com/macros/s/AKfycbyKDvfPSA1OXGPW_hYWW1O42GQ2IIP6GGEyz1bDFhr4zDHB9LQuS4MHu1TsMJGu2wet/exec", {
